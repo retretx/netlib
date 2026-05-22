@@ -232,9 +232,9 @@ public:
     }
 
 private:
-    static SOCKET to_socket(int fd) { return reinterpret_cast<SOCKET>(static_cast<intptr_t>(fd)); }
+    static SOCKET to_socket(int fd) { return static_cast<SOCKET>(static_cast<UINT_PTR>(fd)); }
 
-    static int to_fd(SOCKET s) { return static_cast<int>(reinterpret_cast<intptr_t>(s)); }
+    static int to_fd(SOCKET s) { return static_cast<int>(static_cast<UINT_PTR>(s)); }
 
     [[noreturn]] static void throw_wsa(char const* context) {
         throw net_error(std::string{context} + ": WSA error " + std::to_string(::WSAGetLastError()));

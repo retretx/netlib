@@ -146,6 +146,8 @@ private:
 template<>
 class [[nodiscard]] task<void> {
 public:
+    using value_type = void;
+
     struct promise_type : detail::task_promise_storage<void> {
         using storage = detail::task_promise_storage<void>;
 

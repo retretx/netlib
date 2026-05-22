@@ -11,6 +11,12 @@ target_include_directories(netlib INTERFACE
 
 target_compile_features(netlib INTERFACE cxx_std_${NETLIB_CXX_STANDARD})
 
+if(NOT NETLIB_HAS_MOVE_ONLY_FUNCTION)
+    target_compile_options(netlib INTERFACE
+        "$<$<COMPILE_LANGUAGE:CXX>:-include=${CMAKE_CURRENT_SOURCE_DIR}/include/netlib/detail/move_only_function.hpp>"
+    )
+endif()
+
 if(NETLIB_ENABLE_COROUTINES)
     target_compile_definitions(netlib INTERFACE NETLIB_ENABLE_COROUTINES=1)
     message(STATUS "netlib: NETLIB_ENABLE_COROUTINES=ON")
