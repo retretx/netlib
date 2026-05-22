@@ -1,0 +1,42 @@
+@startuml netlib_layers
+skinparam shadowing false
+skinparam packageStyle rectangle
+
+title Зависимости слоёв netlib
+
+package "Потребитель" {
+  [Приложение] as app
+}
+
+package "rrmode::netlib" {
+  package "net::simple" as simple
+  package "net::medium" as medium
+  package "net" as full
+  package "execution" as exec
+}
+
+package "Платформа" {
+  [epoll / kqueue / WSAPoll] as reactor_os
+  [pthread / Winsock] as os
+}
+
+app --> simple
+app --> medium
+app --> full
+simple --> full
+medium --> full
+full --> exec
+exec --> os
+full --> reactor_os
+
+note right of full
+  TCP, UDP, event_loop,
+  awaitables, timeout
+end note
+
+note right of exec
+  thread_pool, scheduler,
+  task, when_all, when_any
+end note
+
+@enduml

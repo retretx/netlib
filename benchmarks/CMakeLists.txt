@@ -1,0 +1,31 @@
+if(NETLIB_BENCHMARK_BUILD_SCHEDULE)
+    find_package(Threads REQUIRED)
+    add_executable(schedule_bench schedule_bench.cpp)
+    target_link_libraries(schedule_bench PRIVATE netlib::netlib Threads::Threads)
+    target_compile_features(schedule_bench PRIVATE cxx_std_${NETLIB_CXX_STANDARD})
+    target_include_directories(schedule_bench PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(NOT NETLIB_BENCHMARK_BUILD_NETWORK)
+    return()
+endif()
+
+if(WIN32 AND NETLIB_BENCHMARKS_REQUIRE_POSIX)
+    message(STATUS "netlib: tcp/udp benchmarks пропущены (NETLIB_BENCHMARKS_REQUIRE_POSIX)")
+    return()
+endif()
+
+if(NETLIB_BENCHMARKS_REQUIRE_COROUTINES AND NOT NETLIB_ENABLE_COROUTINES)
+    message(STATUS "netlib: tcp/udp benchmarks требуют NETLIB_ENABLE_COROUTINES")
+    return()
+endif()
+
+find_package(Threads REQUIRED)
+
+add_executable(tcp_echo_bench tcp_echo_bench.cpp)
+add_executable(udp_ping_bench udp_ping_bench.cpp)
+foreach(target tcp_echo_bench udp_ping_bench)
+    target_link_libraries(${target} PRIVATE netlib::netlib Threads::Threads)
+    target_compile_features(${target} PRIVATE cxx_std_${NETLIB_CXX_STANDARD})
+    target_include_directories(${target} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+endforeach()

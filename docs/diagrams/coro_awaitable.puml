@@ -1,0 +1,22 @@
+@startuml coro_awaitable
+skinparam sequenceMessageAlign center
+
+title Мост callback → co_await (connect_async)
+
+participant "coroutine" as Coro
+participant "connect_awaitable" as Await
+participant "tcp_socket" as Sock
+participant "event_loop" as Loop
+
+Coro -> Await : co_await connect_async(sock, loop, ep, token)
+Await -> Await : await_ready() == false
+Await -> Await : bind_cancel(token → cancel_io)
+Await -> Sock : async_connect(..., resume, on_error)
+note over Sock, Loop
+  По завершении connect
+  вызывается h.resume()
+end note
+Sock --> Await : resume coroutine
+Await -> Coro : await_resume()\nили rethrow exception
+
+@enduml

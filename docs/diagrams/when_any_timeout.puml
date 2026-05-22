@@ -1,0 +1,32 @@
+@startuml when_any_timeout
+skinparam sequenceMessageAlign center
+
+title with_timeout и отмена сетевого I/O
+
+participant App
+participant "with_timeout" as WT
+participant "when_any" as WA
+participant "primary task" as Work
+participant "timeout_after" as TOut
+
+App -> WT : with_timeout(sched, work, limit)
+WT -> WA : when_any(sched, work, timeout_after(...))
+par гонка
+  WA -> Work : launch
+  WA -> TOut : launch (delay_async)
+end
+
+alt primary победил
+  WA --> App : результат work
+  note over TOut : loser может ещё выполняться;\nопционально on_loser_*
+else timeout победил
+  TOut -> TOut : delay_async\nthrow timeout_error
+  WA --> App : timeout_error
+  note over App
+    Для connect_with_timeout:
+    cancel в catch, не в on_work_lost,
+    чтобы не получить net_error «отменена»
+  end note
+end
+
+@enduml

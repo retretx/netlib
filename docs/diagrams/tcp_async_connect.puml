@@ -1,0 +1,30 @@
+@startuml tcp_async_connect
+skinparam sequenceMessageAlign center
+
+title TCP async_connect (EINPROGRESS)
+
+actor App
+participant "tcp_socket" as Sock
+participant "event_loop" as Loop
+participant "socket_backend" as OS
+participant "scheduler" as Sched
+
+App -> Sock : async_connect(loop, ep, on_ok, on_err)
+Sock -> OS : create_tcp_socket()\nset_non_blocking\nstart_connect()
+alt connect сразу (rc == 0)
+  Sock -> Sched : schedule(on_ok)
+  Sched --> App : on_connected()
+else EINPROGRESS
+  Sock -> Loop : register_fd(writable, lambda)
+  Loop -> OS : epoll_wait / kqueue
+  OS --> Loop : writable
+  Loop -> Sock : callback
+  Sock -> OS : SO_ERROR
+  alt SO_ERROR == 0
+    Sock -> Sched : schedule(on_ok)
+  else ошибка
+    Sock -> Sched : schedule(on_err)
+  end
+end
+
+@enduml
