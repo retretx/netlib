@@ -9,7 +9,8 @@
 #include <utility>
 #include <version>
 
-#if defined(__cpp_lib_move_only_function) && (__cpp_lib_move_only_function >= 202110L)
+#if !defined(NETLIB_POLYFILL_MOVE_ONLY_FUNCTION) && defined(__cpp_lib_move_only_function) \
+    && (__cpp_lib_move_only_function >= 202110L)
 // std::move_only_function is available.
 #else
 

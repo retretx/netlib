@@ -12,6 +12,7 @@ target_include_directories(netlib INTERFACE
 target_compile_features(netlib INTERFACE cxx_std_${NETLIB_CXX_STANDARD})
 
 if(NOT NETLIB_HAS_MOVE_ONLY_FUNCTION)
+    target_compile_definitions(netlib INTERFACE NETLIB_POLYFILL_MOVE_ONLY_FUNCTION=1)
     target_compile_options(netlib INTERFACE
         "$<$<COMPILE_LANGUAGE:CXX>:-include=${CMAKE_CURRENT_SOURCE_DIR}/include/netlib/detail/move_only_function.hpp>"
     )
