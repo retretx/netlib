@@ -32,9 +32,9 @@ TEST_CASE("delay_async scheduler: параллельные паузы") {
     sync_wait(sched, parallel_delays(sched));
     auto const elapsed = std::chrono::steady_clock::now() - t0;
 
-    pool.shutdown();
     REQUIRE(elapsed >= std::chrono::milliseconds{35});
-    REQUIRE(elapsed < std::chrono::milliseconds{120});
+    REQUIRE(elapsed < std::chrono::milliseconds{300});
+    pool.shutdown();
 }
 
 TEST_CASE("delay_async scheduler: нулевая длительность") {

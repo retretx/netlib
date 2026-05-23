@@ -1,5 +1,6 @@
 #pragma once
 
+#include <netlib/execution/error.hpp>
 #include <netlib/execution/scheduler.hpp>
 
 #include <condition_variable>
@@ -51,7 +52,11 @@ inline void resume_on_scheduler(scheduler_holder& holder, std::coroutine_handle<
     }
     if (cont) {
         if (holder.sched != nullptr) {
-            holder.sched->schedule([cont]() mutable { cont.resume(); });
+            try {
+                holder.sched->schedule([cont]() mutable { cont.resume(); });
+            } catch (execution_error const&) {
+                // Detached coroutine завершилась после shutdown thread_pool.
+            }
         } else {
             cont.resume();
         }

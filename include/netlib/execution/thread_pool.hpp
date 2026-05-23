@@ -40,6 +40,11 @@ public:
         queue_.push(std::move(fn));
     }
 
+    /// После shutdown: true, если post() отклонит задачу.
+    [[nodiscard]] bool is_stopped() const noexcept {
+        return stopped_.load(std::memory_order_acquire);
+    }
+
     void request_stop() override { shutdown(); }
 
     /// Остановить пул: закрыть очередь, дождаться потоков.

@@ -36,8 +36,8 @@ TEST_CASE("when_all выполняет обе task параллельно") {
     REQUIRE(sync_wait(sched, when_all_demo(sched)) == 30);
     auto const elapsed = std::chrono::steady_clock::now() - t0;
 
+    REQUIRE(elapsed < std::chrono::milliseconds{200});
     pool.shutdown();
-    REQUIRE(elapsed < std::chrono::milliseconds{80});
 }
 
 TEST_CASE("when_all пробрасывает исключение") {

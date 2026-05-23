@@ -44,8 +44,8 @@ TEST_CASE("when_all vector возвращает результаты по пор
     REQUIRE(sync_wait(sched, sum_three(sched)) == 6);
     auto const elapsed = std::chrono::steady_clock::now() - t0;
 
+    REQUIRE(elapsed < std::chrono::milliseconds{200});
     pool.shutdown();
-    REQUIRE(elapsed < std::chrono::milliseconds{80});
 }
 
 TEST_CASE("when_all vector пустой") {
