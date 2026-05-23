@@ -1,7 +1,7 @@
 #pragma once
 
 // Polyfill std::move_only_function when the standard library does not provide it
-// (e.g. libc++ on Apple Clang in CI). Included via -include when NETLIB_POLYFILL_MOVE_ONLY_FUNCTION=ON.
+// (e.g. libc++ on Apple Clang in CI). Included from headers that use std::move_only_function.
 
 #include <functional>
 #include <memory>

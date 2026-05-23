@@ -9,7 +9,7 @@
 
 #include <atomic>
 #include <cstdint>
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <memory>
 #include <mutex>
 #include <utility>

@@ -8,7 +8,7 @@
 #include <netlib/net/unix_endpoint.hpp>
 
 #include <cstring>
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <memory>
 #include <span>
 #include <utility>

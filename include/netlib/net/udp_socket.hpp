@@ -8,7 +8,7 @@
 #include <netlib/net/event_loop.hpp>
 
 #include <cstdint>
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <memory>
 #include <span>
 #include <utility>

@@ -13,17 +13,6 @@ target_compile_features(netlib INTERFACE cxx_std_${NETLIB_CXX_STANDARD})
 
 if(NOT NETLIB_HAS_MOVE_ONLY_FUNCTION)
     target_compile_definitions(netlib INTERFACE NETLIB_POLYFILL_MOVE_ONLY_FUNCTION=1)
-    set(_netlib_move_only_function_hdr
-        "${CMAKE_CURRENT_SOURCE_DIR}/include/netlib/detail/move_only_function.hpp")
-    # -include и путь — отдельные аргументы: -include=/path на Clang/macOS даёт #include "=/path".
-    if(MSVC)
-        target_compile_options(netlib INTERFACE
-            "$<$<COMPILE_LANGUAGE:CXX>:$<BUILD_INTERFACE:/FI${_netlib_move_only_function_hdr}>>")
-    else()
-        target_compile_options(netlib INTERFACE
-            "$<$<COMPILE_LANGUAGE:CXX>:$<BUILD_INTERFACE:-include>"
-            "$<$<COMPILE_LANGUAGE:CXX>:$<BUILD_INTERFACE:${_netlib_move_only_function_hdr}>>")
-    endif()
 endif()
 
 if(NETLIB_ENABLE_COROUTINES)
