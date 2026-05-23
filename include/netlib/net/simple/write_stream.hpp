@@ -6,7 +6,7 @@
 #include <netlib/net/simple/writable_chunk.hpp>
 
 #include <cstddef>
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <optional>
 #include <vector>
 

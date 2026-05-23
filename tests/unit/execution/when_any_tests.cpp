@@ -47,6 +47,6 @@ TEST_CASE("with_timeout: бросает timeout_error") {
     thread_pool pool{2};
     scheduler sched{pool};
     REQUIRE_THROWS_AS(sync_wait(sched, timeout_race(sched)), timeout_error);
-    std::this_thread::sleep_for(std::chrono::milliseconds{250});
+    std::this_thread::sleep_for(std::chrono::milliseconds{300});
     pool.shutdown();
 }

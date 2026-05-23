@@ -1,9 +1,14 @@
 #include <netlib/execution/coroutine.hpp>
+#include <netlib/execution/error.hpp>
+#include <netlib/execution/executor.hpp>
 #include <netlib/execution/thread_pool.hpp>
 
 #include <catch2/catch_test_macros.hpp>
+#include <functional>
 #include <stdexcept>
 
+using rrmode::netlib::execution::execution_error;
+using rrmode::netlib::execution::executor;
 using rrmode::netlib::execution::scheduler;
 using rrmode::netlib::execution::sync_wait;
 using rrmode::netlib::execution::task;
@@ -49,6 +54,36 @@ TEST_CASE("task void завершается без значения") {
     scheduler sched{pool};
     REQUIRE_NOTHROW(sync_wait(sched, void_task(sched)));
     pool.shutdown();
+}
+
+TEST_CASE("task: execution_error от schedule возобновляет continuation") {
+    struct stopped_executor final : executor {
+        void post(std::function<void()> /*fn*/) override {
+            throw execution_error("post в остановленный thread_pool");
+        }
+    };
+
+    stopped_executor ex;
+    scheduler sched{ex};
+    bool parent_done = false;
+    bool outer_done = false;
+
+    auto child = []() -> task<void> { co_return; };
+    auto parent = [&]() -> task<void> {
+        co_await child();
+        parent_done = true;
+    };
+    auto outer = [&]() -> task<void> {
+        co_await parent();
+        outer_done = true;
+    };
+
+    auto h = outer().release();
+    h.promise().set_scheduler(sched);
+    h.resume();
+
+    REQUIRE(parent_done);
+    REQUIRE(outer_done);
 }
 
 TEST_CASE("task пробрасывает исключение") {

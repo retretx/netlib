@@ -7,7 +7,7 @@
 #include <netlib/net/medium/tcp_socket.hpp>
 #include <netlib/net/tcp_acceptor.hpp>
 
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <utility>
 
 namespace rrmode::netlib::net::medium {

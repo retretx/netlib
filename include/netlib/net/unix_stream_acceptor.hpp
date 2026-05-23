@@ -8,7 +8,7 @@
 #include <netlib/net/unix_stream_socket.hpp>
 
 #include <atomic>
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <memory>
 #include <mutex>
 #include <string>

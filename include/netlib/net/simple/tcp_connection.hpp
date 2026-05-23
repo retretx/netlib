@@ -7,7 +7,7 @@
 #include <netlib/net/tcp_socket.hpp>
 
 #include <cstddef>
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <memory>
 #include <span>
 #include <thread>

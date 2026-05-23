@@ -1,8 +1,8 @@
 #pragma once
 
 #include <netlib/execution/executor.hpp>
+#include <netlib/detail/move_only_function.hpp>
 
-#include <functional>
 #include <memory>
 
 namespace rrmode::netlib::execution {

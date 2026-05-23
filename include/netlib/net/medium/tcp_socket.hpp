@@ -6,7 +6,7 @@
 #include <netlib/net/medium/socket_options.hpp>
 #include <netlib/net/tcp_socket.hpp>
 
-#include <functional>
+#include <netlib/detail/move_only_function.hpp>
 #include <span>
 #include <vector>
 

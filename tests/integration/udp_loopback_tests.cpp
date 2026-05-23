@@ -80,10 +80,10 @@ TEST_CASE("UDP loopback ping-pong") {
     REQUIRE(client_msg == "pong");
 }
 
+}  // namespace
+
 #else
 
 TEST_CASE("UDP loopback ping-pong") { REQUIRE(true); }
 
 #endif
-
-}  // namespace

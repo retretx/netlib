@@ -4,6 +4,8 @@
 #include <netlib/net/error.hpp>
 #include <netlib/net/unix_endpoint.hpp>
 
+#include <algorithm>
+
 #include <deque>
 #include <optional>
 #include <span>
@@ -152,7 +154,7 @@ public:
         auto dg = std::move(s.datagram_rx.front());
         s.datagram_rx.pop_front();
         out = dg.remote;
-        std::size_t const n = std::min(buf.size(), dg.payload.size());
+        std::size_t const n = (std::min)(buf.size(), dg.payload.size());
         for (std::size_t i = 0; i < n; ++i) {
             buf[i] = dg.payload[i];
         }
@@ -194,7 +196,7 @@ public:
             }
             return std::size_t{0};
         }
-        std::size_t n = std::min(buf.size(), s.rx.size());
+        std::size_t n = (std::min)(buf.size(), s.rx.size());
         for (std::size_t i = 0; i < n; ++i) {
             buf[i] = s.rx.front();
             s.rx.pop_front();
