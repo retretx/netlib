@@ -55,7 +55,9 @@ inline void resume_on_scheduler(scheduler_holder& holder, std::coroutine_handle<
             try {
                 holder.sched->schedule([cont]() mutable { cont.resume(); });
             } catch (execution_error const&) {
-                // Detached coroutine завершилась после shutdown thread_pool.
+                // thread_pool остановлен: продолжение нельзя отложить, но цепочку co_await
+                // нужно завершить синхронно, иначе родитель зависнет на final_suspend.
+                cont.resume();
             }
         } else {
             cont.resume();
