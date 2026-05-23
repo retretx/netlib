@@ -1,9 +1,9 @@
 #pragma once
 
 #include <netlib/net/detail/poll_event.hpp>
+#include <netlib/detail/move_only_function.hpp>
 
 #include <chrono>
-#include <functional>
 
 namespace rrmode::netlib::net::detail {
 

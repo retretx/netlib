@@ -8,10 +8,10 @@
 #include <catch2/catch_test_macros.hpp>
 #include <string>
 #include <thread>
-#include <unistd.h>
 #include <vector>
 
 #if defined(__linux__) || defined(__APPLE__)
+#include <unistd.h>
 
 using namespace std::chrono_literals;
 
